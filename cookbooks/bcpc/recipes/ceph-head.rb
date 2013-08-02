@@ -130,3 +130,4 @@ execute "ceph-mds-start" do
 end
 
 include_recipe "bcpc::ceph-work"
+include_recipe "bcpc::ceph-rgw"

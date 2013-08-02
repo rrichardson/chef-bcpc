@@ -56,3 +56,5 @@ template '/etc/ceph/ceph.conf' do
     mode '0644'
     variables( :servers => get_head_nodes )
 end
+
+

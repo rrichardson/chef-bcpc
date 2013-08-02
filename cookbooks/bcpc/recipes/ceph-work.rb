@@ -80,3 +80,4 @@ execute "cephfs-mount-fs" do
     EOH
     not_if "mount | grep ceph-fuse"
 end
+
