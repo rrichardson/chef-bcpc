@@ -9,6 +9,7 @@
       "recipe[bcpc::networking]",
       "recipe[bcpc::ntp]",
       "recipe[bcpc::ceph-work]",
+      "recipe[bcpc::ceph-rgw]",
       "recipe[bcpc::nova-work]",
       "recipe[bcpc::diamond]",
       "recipe[bcpc::beaver]",

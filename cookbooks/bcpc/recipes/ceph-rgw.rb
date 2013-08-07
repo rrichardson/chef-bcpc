@@ -22,8 +22,6 @@
 #Note, currently rgw cannot use Keystone to auth S3 requests, only swift, so for the time being we'll have
 #to manually provision accounts for RGW in the radosgw-admin tool
 
-include_recipe "bcpc::ceph-common"
-
 apt_repository "ceph-fcgi" do
     uri node['bcpc']['repos']['ceph-fcgi']
     distribution node['lsb']['codename']
@@ -45,15 +43,16 @@ user node[:bcpc][:radosgw][:user] do
     system true
 end
 
-
-%w{apache2 lib-apache2-mod-fastcgi}.each do |pkg|
-    package pkg do
-        action :upgrade
-    end
+package apache2 do
+   action :upgrade
+   version "2.2.22-1ubuntu1-inktank1"
 end
 
-#I'm not sure what this does but it was in the ceph QA chef recipe
-package 'libfcgi0ldbl'
+package libapache2-mod-fastcgi do
+   action :upgrade
+   version "2.4.7~0910052141-1-inktank2"
+end
+
 
 service "apache2" do
   action [ :disable, :stop ]
@@ -93,11 +92,19 @@ execute "ceph-radosgw-start" do
    EOH
 end
 
-template "/etc/apache2/conf.d/ceph-web.conf" do
+file "/var/www/s3gw.fcgi" do
+    owner root 
+    group root 
+    mode 0755
+    content "#!/bin/sh\n exec /usr/bin/radosgw -c /etc/ceph/ceph.conf -n client.radosgw.gateway"
+end
+
+template "/etc/apache2/sites-enabled/ceph-web.conf" do
     source "apache-radosgw.conf.erb"
     owner "root"
     group "root"
     mode 00644
     notifies :restart, "service[apache2]", :delayed
 end
+
 

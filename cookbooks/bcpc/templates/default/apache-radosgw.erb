@@ -1,7 +1,11 @@
 <VirtualHost  <%="#{node[:bcpc][:management][:ip]}"%>:80>
 	ServerName "s3.<%="#{node[:bcpc][:domain_name]}"%>"
+        ServerAlias "<%="#{node[:hostname]}"%>"
         ServerAdmin rrichardson6@bloomberg.net
         DocumentRoot /var/www
+
+        RewriteEngine On
+	RewriteRule ^/([a-zA-Z0-9-_.]*)([/]?.*) /s3gw.fcgi?page=$1&params=$2&%{QUERY_STRING} [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
         <IfModule mod_fastcgi.c>
                 <Directory /var/www>
                         Options +ExecCGI
