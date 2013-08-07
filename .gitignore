@@ -4,4 +4,5 @@ cookbooks/apt/
 cookbooks/chef-client/
 cookbooks/cron/
 cookbooks/ubuntu/
+environments/*
 .*.sw*

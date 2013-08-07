@@ -36,13 +36,6 @@ apt_repository "ceph-apache" do
     key "ceph-release.key"
 end
 
-user node[:bcpc][:radosgw][:user] do
-    shell "/bin/false"
-    home "/var/log"
-    gid node[:bcpc][:radosgw][:group]
-    system true
-end
-
 package apache2 do
    action :upgrade
    version "2.2.22-1ubuntu1-inktank1"
@@ -59,7 +52,7 @@ service "apache2" do
 end
 
 
-directory "/var/lib/ceph/radosgw/ceph-client.radosgw.gateway"
+directory "/var/lib/ceph/radosgw/ceph-client.radosgw.gateway" do
   owner "root"
   group "root"
   mode 0755
@@ -85,13 +78,6 @@ bash "write-client-radosgw-key" do
     not_if "test -f /var/lib/ceph/radosgw/ceph-client.radosgw.gateway/keyring && chmod 644 /var/lib/ceph/radosgw/ceph-client.radosgw.gateway/keyring" 
 end
 
-
-execute "ceph-radosgw-start" do
-   command <<-EOH
-        restart radosgw-all-starter
-   EOH
-end
-
 file "/var/www/s3gw.fcgi" do
     owner root 
     group root 
@@ -108,3 +94,8 @@ template "/etc/apache2/sites-enabled/ceph-web.conf" do
 end
 
 
+execute "ceph-radosgw-start" do
+   command <<-EOH
+        restart radosgw-all-starter
+   EOH
+end
