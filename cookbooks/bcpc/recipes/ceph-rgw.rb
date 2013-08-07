@@ -38,6 +38,13 @@ apt_repository "ceph-apache" do
     key "ceph-release.key"
 end
 
+user node[:bcpc][:radosgw][:user] do
+    shell "/bin/false"
+    home "/var/log"
+    gid node[:bcpc][:radosgw][:group]
+    system true
+end
+
 
 %w{apache2 lib-apache2-mod-fastcgi}.each do |pkg|
     package pkg do
@@ -86,6 +93,11 @@ execute "ceph-radosgw-start" do
    EOH
 end
 
-service "apache2" do
-  action :start
+template "/etc/apache2/conf.d/ceph-web.conf" do
+    source "apache-radosgw.conf.erb"
+    owner "root"
+    group "root"
+    mode 00644
+    notifies :restart, "service[apache2]", :delayed
 end
+

@@ -174,3 +174,28 @@ listen logstash-zmq <%="#{node[:bcpc][:management][:vip]}"%>:5556
 <% @servers.each do |server| -%>
   <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:5556 check inter 1s rise 1 fall 1 observe layer4" %>
 <% end -%>
+
+listen radosgw-redir-http  <%="#{node[:bcpc][:management][:vip]}"%>:10080
+  balance source
+<% @work_servers.each do |server| -%>
+  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:80 check" %>
+<% end -%>
+
+listen radosgw-redir-https  <%="#{node[:bcpc][:management][:vip]}"%>:10443
+  balance source
+<% @work_servers.each do |server| -%>
+  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:443 check" %>
+<% end -%>
+
+listen radosgw-passthru-http  <%="#{node[:bcpc][:management][:vip]}"%>:11080
+  balance source
+<% @work_servers.each do |server| -%>
+  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:80 check inter 1s rise 1 fall 1 observe layer4" %>
+<% end -%>
+
+listen radosgw-passthru-https  <%="#{node[:bcpc][:management][:vip]}"%>:11443
+  balance source
+<% @work_servers.each do |server| -%>
+  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:443 check inter 1s rise 1 fall 1 observe layer4" %>
+<% end -%>
+

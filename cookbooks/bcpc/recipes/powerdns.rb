@@ -129,6 +129,7 @@ end
     end
 end
 
+
 ruby_block "powerdns-table-view" do
     block do
         if not system "mysql -uroot -p#{get_config('mysql-root-password')} -e 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_SCHEMA = \"#{node['bcpc']['pdns_dbname']}\" AND TABLE_NAME=\"records\"'|grep \"records\"" then
