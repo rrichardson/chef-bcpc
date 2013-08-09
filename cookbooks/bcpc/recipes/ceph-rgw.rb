@@ -22,44 +22,22 @@
 #Note, currently rgw cannot use Keystone to auth S3 requests, only swift, so for the time being we'll have
 #to manually provision accounts for RGW in the radosgw-admin tool
 
-apt_repository "ceph-fcgi" do
-    uri node['bcpc']['repos']['ceph-fcgi']
-    distribution node['lsb']['codename']
-    components ["main"]
-    key "ceph-release.key"
-end
-
-apt_repository "ceph-apache" do
-    uri node['bcpc']['repos']['ceph-apache']
-    distribution node['lsb']['codename']
-    components ["main"]
-    key "ceph-release.key"
-end
-
-package apache2 do
-   action :upgrade
-   version "2.2.22-1ubuntu1-inktank1"
-end
-
-package libapache2-mod-fastcgi do
-   action :upgrade
-   version "2.4.7~0910052141-1-inktank2"
+%w{radosgw}.each do |pkg|
+    package pkg do
+        action :upgrade
+    end
 end
 
 
-service "apache2" do
-  action [ :disable, :stop ]
-end
-
-
-directory "/var/lib/ceph/radosgw/ceph-client.radosgw.gateway" do
+directory "/var/lib/ceph/radosgw/ceph-radosgw.gateway" do
   owner "root"
   group "root"
-  mode 0755
+  mode 00755
   action :create
+  recursive true
 end
 
-file "/var/lib/ceph/radosgw/ceph-client.radosgw.gateway/done" do
+file "/var/lib/ceph/radosgw/ceph-radosgw.gateway/done" do
   owner "root"
   group "root"
   mode "0644"
@@ -70,22 +48,22 @@ end
 bash "write-client-radosgw-key" do
     code <<-EOH
         RGW_KEY=`ceph --name client.admin --keyring /etc/ceph/ceph.client.admin.keyring auth get-or-create-key client.radosgw.gateway osd 'allow rwx' mon 'allow r'`
-        ceph-authtool "/var/lib/ceph/radosgw/ceph-client.radosgw.gateway/keyring" \
+        ceph-authtool "/var/lib/ceph/radosgw/ceph-radosgw.gateway/keyring" \
             --create-keyring \
             --name=client.radosgw.gateway \
             --add-key="$RGW_KEY"
     EOH
-    not_if "test -f /var/lib/ceph/radosgw/ceph-client.radosgw.gateway/keyring && chmod 644 /var/lib/ceph/radosgw/ceph-client.radosgw.gateway/keyring" 
+    not_if "test -f /var/lib/ceph/radosgw/ceph-radosgw.gateway/keyring && chmod 644 /var/lib/ceph/radosgw/ceph-radosgw.gateway/keyring" 
 end
 
 file "/var/www/s3gw.fcgi" do
-    owner root 
-    group root 
-    mode 0755
+    owner "root" 
+    group "root" 
+    mode 00755
     content "#!/bin/sh\n exec /usr/bin/radosgw -c /etc/ceph/ceph.conf -n client.radosgw.gateway"
 end
 
-template "/etc/apache2/sites-enabled/ceph-web.conf" do
+template '/etc/apache2/sites-enabled/radosgw.conf' do
     source "apache-radosgw.conf.erb"
     owner "root"
     group "root"
@@ -94,8 +72,7 @@ template "/etc/apache2/sites-enabled/ceph-web.conf" do
 end
 
 
-execute "ceph-radosgw-start" do
-   command <<-EOH
-        restart radosgw-all-starter
-   EOH
+service "radosgw-all-starter" do 
+  provider Chef::Provider::Service::Upstart
+  action [:enable, :start]
 end

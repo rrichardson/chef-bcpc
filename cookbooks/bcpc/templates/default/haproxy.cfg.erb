@@ -175,27 +175,27 @@ listen logstash-zmq <%="#{node[:bcpc][:management][:vip]}"%>:5556
   <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:5556 check inter 1s rise 1 fall 1 observe layer4" %>
 <% end -%>
 
-listen radosgw-redir-http  <%="#{node[:bcpc][:management][:vip]}"%>:10080
+listen radosgw-redir-http  <%="#{node[:bcpc][:management][:vip]}:#{node[:bcpc][:ports][:haproxy][:radosgw_redir]}"%>
   balance source
 <% @work_servers.each do |server| -%>
-  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:80 check" %>
+  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:#{server[:bcpc][:ports][:apache][:radosgw]} check" %>
 <% end -%>
 
-listen radosgw-redir-https  <%="#{node[:bcpc][:management][:vip]}"%>:10443
+listen radosgw-redir-https  <%="#{node[:bcpc][:management][:vip]}:#{node[:bcpc][:ports][:haproxy][:radosgw_redir_https]}"%>
   balance source
 <% @work_servers.each do |server| -%>
-  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:443 check" %>
+  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:#{server[:bcpc][:ports][:apache][:radosgw_https]} check" %>
 <% end -%>
 
-listen radosgw-passthru-http  <%="#{node[:bcpc][:management][:vip]}"%>:11080
+listen radosgw-passthru-http  <%="#{node[:bcpc][:management][:vip]}:#{node[:bcpc][:ports][:haproxy][:radosgw_pass]}"%>
   balance source
 <% @work_servers.each do |server| -%>
-  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:80 check inter 1s rise 1 fall 1 observe layer4" %>
+  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:#{server[:bcpc][:ports][:apache][:radosgw]} check inter 1s rise 1 fall 1 observe layer4" %>
 <% end -%>
 
-listen radosgw-passthru-https  <%="#{node[:bcpc][:management][:vip]}"%>:11443
+listen radosgw-passthru-https  <%="#{node[:bcpc][:management][:vip]}:#{node[:bcpc][:ports][:haproxy][:radosgw_pass_https]}"%>
   balance source
 <% @work_servers.each do |server| -%>
-  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:443 check inter 1s rise 1 fall 1 observe layer4" %>
+  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:#{server[:bcpc][:ports][:apache][:radosgw_https]} check inter 1s rise 1 fall 1 observe layer4" %>
 <% end -%>
 

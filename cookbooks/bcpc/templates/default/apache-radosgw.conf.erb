@@ -1,8 +1,6 @@
-NameVirtualHost <%="#{node[:bcpc][:management][:ip]}:#{node[:bcpc][:ports][:apache][:radosgw]}"%>
-Listen <%="#{node[:bcpc][:management][:ip]}:#{node[:bcpc][:ports][:apache][:radosgw]}"%>
-
-<VirtualHost  <%="#{node[:bcpc][:management][:ip]}:#{node[:bcpc][:ports][:apache][:radosgw]}"%>
+<VirtualHost  <%="#{node[:bcpc][:management][:ip]}"%>:80>
 	ServerName "s3.<%="#{node[:bcpc][:domain_name]}"%>"
+        ServerAlias "<%="#{node[:hostname]}"%>"
         ServerAdmin rrichardson6@bloomberg.net
         DocumentRoot /var/www
 	
