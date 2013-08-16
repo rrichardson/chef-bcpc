@@ -259,7 +259,7 @@ template "/etc/apache2/sites-enabled/000-default" do
     notifies :restart, "service[apache2]", :delayed
 end
 
-%w{proxy_http ssl}.each do |mod|
+%w{proxy_http rewrite ssl}.each do |mod|
     bash "apache-enable-#{mod}" do
         user "root"
         code <<-EOH

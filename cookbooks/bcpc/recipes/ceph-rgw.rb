@@ -45,11 +45,6 @@ file "/var/lib/ceph/radosgw/ceph-radosgw.gateway/done" do
   action :touch
 end
 
-link "/etc/apache2/mods-available/rewrite.load" do
-  to "/etc/apache2/mods-enabled/rewrite.load" 
-  not_if "test -L /etc/apache2/mods-enabled/rewrite.load"
-end
-
 
 bash "write-client-radosgw-key" do
     code <<-EOH
