@@ -29,6 +29,7 @@ end
 %w{ceph python-ceph}.each do |pkg|
     package pkg do
         action :upgrade
+        version node[:bcpc][:ceph][:version]
     end
 end
 

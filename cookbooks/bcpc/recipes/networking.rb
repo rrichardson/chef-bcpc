@@ -251,11 +251,6 @@ package "libapache2-mod-fastcgi" do
    version "2.4.7~0910052141-1-inktank2"
 end
 
-package "apache2" do
-    action :upgrade
-    version
-end
-
 template "/etc/apache2/sites-enabled/000-default" do
     source "apache-000-default.erb"
     owner "root"
