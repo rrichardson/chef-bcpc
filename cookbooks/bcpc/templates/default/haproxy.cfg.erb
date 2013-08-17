@@ -178,13 +178,13 @@ listen logstash-zmq <%="#{node[:bcpc][:management][:vip]}"%>:5556
 listen radosgw-redir-http  <%="#{node[:bcpc][:management][:vip]}:#{node[:bcpc][:ports][:haproxy][:radosgw_redir]}"%>
   balance source
 <% @work_servers.each do |server| -%>
-  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:#{server[:bcpc][:ports][:apache][:radosgw]} check" %>
+  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:#{server[:bcpc][:ports][:apache][:radosgw]} redir http://#{server[:bcpc][:management][:ip]}:#{server[:bcpc][:ports][:apache][:radosgw]} check" %>
 <% end -%>
 
 listen radosgw-redir-https  <%="#{node[:bcpc][:management][:vip]}:#{node[:bcpc][:ports][:haproxy][:radosgw_redir_https]}"%>
   balance source
 <% @work_servers.each do |server| -%>
-  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:#{server[:bcpc][:ports][:apache][:radosgw_https]} check" %>
+  <%= "server #{server.hostname} #{server[:bcpc][:management][:ip]}:#{server[:bcpc][:ports][:apache][:radosgw_https]} redir https://#{server[:bcpc][:management][:ip]}:#{server[:bcpc][:ports][:apache][:radosgw_https]} check" %>
 <% end -%>
 
 listen radosgw-passthru-http  <%="#{node[:bcpc][:management][:vip]}:#{node[:bcpc][:ports][:haproxy][:radosgw_pass]}"%>
