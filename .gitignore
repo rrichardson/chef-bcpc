@@ -5,4 +5,6 @@ cookbooks/chef-client/
 cookbooks/cron/
 cookbooks/ntp/
 cookbooks/ubuntu/
+cookbooks/yum/
+cookbooks/logrotate/
 

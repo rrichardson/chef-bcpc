@@ -69,6 +69,7 @@ default['bcpc']['repos']['mysql'] = "http://repo.percona.com/apt"
 default['bcpc']['repos']['openstack'] = "http://ubuntu-cloud.archive.canonical.com/ubuntu"
 default['bcpc']['repos']['hwraid'] = "http://hwraid.le-vert.net/ubuntu"
 default['bcpc']['repos']['fluentd'] = "http://packages.treasure-data.com/precise"
+default['bcpc']['repos']['cloudera'] = "http://archive.cloudera.com/cdh4/ubuntu/precise/amd64/cdh"
 
 ###########################################
 #

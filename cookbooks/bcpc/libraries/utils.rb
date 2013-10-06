@@ -74,6 +74,16 @@ def get_head_nodes
 	return (results == []) ? [node] : results
 end
 
+def get_hadoop_heads
+	results = search(:node, "role:BCPC-Hadoop-Head AND chef_environment:#{node.chef_environment}")
+	return results.sort_by{|x| x.hostname }.each_with_index.map{ |x, i| { :host => x, :num => i} }
+end
+
+def get_hadoop_journal_nodes
+	results = search(:node, "role:BCPC-Hadoop-Journal AND chef_environment:#{node.chef_environment}")
+	return results.sort_by{|x| x.hostname }.each_with_index.map{ |x, i| { :host => x, :num => i} }
+end
+
 def secure_password
 	pw = String.new
 	while pw.length < 20
