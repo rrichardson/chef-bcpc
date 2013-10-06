@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+  <property>
+     <name>dfs.name.dir</name>
+     <value>/var/lib/hadoop-hdfs/cache/hdfs/dfs/name</value>
+	</property>
+
+  <property>
+     <name>dfs.nameservices</name>
+     <value>bcpc</value>
+	 </property>
+
+  <property>
+    <name>dfs.ha.namenodes.bcpc</name>
+		<value>namenode1,namenode2</value>
+  </property>
+	
+  <% @hh_hosts.each do |h| %>	
+	<property>
+		<name>dfs.namenode.http-address.bcpc.namenode<%=h.num %></name>
+		<value><%=h.host %>:50070</value>
+	</property>
+  <% end %>
+	
+  <% @hh_hosts.each do |h| %>	
+	<property>
+		<name>dfs.namenode.http-address.bcpc.namenode<%=h.num %></name>
+		<value><%=h.host %>:50070</value>
+	</property>
+  <% end %>
+
+  <% @hh_hosts.each do |h| %>	
+	<property>
+		<name>dfs.namenode.https-address.bcpc.namenode<%=h.num %></name>
+		<value><%=h.host %>:50080</value>
+	</property>
+  <% end %>
+
+  <% @journal_hosts.each do |h| %>	
+  <property>
+    <name>dfs.namenode.shared.edits.dir</name>
+    <value>qjournal://node1.example.com:8485;node2.example.com:8485;node3.example.com:8485/mycluster</value>
+  </property>
+  <% end %>
+
+	<property>
+		<name>dfs.client.failover.proxy.provider.mycluster</name>
+		<value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+	</property>
+
+  <property>
+    <name>dfs.ha.automatic-failover.enabled</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>ha.zookeeper.quorum</name>
+		<value><%= @zk_servers.map{ |s| s.host + ":2181" }.join(",") %></value> 
+  </property>
+
+	<% if node[:bcpc][:hadoop][:journal][:path] %>
+	<property>
+ 		<name>dfs.journalnode.edits.dir</name>
+ 		<value><%= node[:bcpc][:hadoop][:journal][:path]</value>
+	</property>
+  <% end %>
+
+</configuration>
