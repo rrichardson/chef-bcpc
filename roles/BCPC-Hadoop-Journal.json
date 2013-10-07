@@ -1,9 +1,3 @@
-
-<property>
-  <name>dfs.journalnode.edits.dir</name>
-  <value></value>
-</property>
-
 {
     "name": "BCPC-Hadoop-Journal",
     "default_attributes": {

@@ -9,7 +9,7 @@ when "debian"
 			key "cloudera-archive.key"
 	end
 
-	%w{hadoop hbase hive oozie pig}.each do |w| 
+	%w{hadoop hbase hive oozie pig}.each do |w|
 		directory "/etc/#{w}/conf.bcpc" do
 			owner "root"
 			group "root"
@@ -17,7 +17,7 @@ when "debian"
 			action :create
 			recursive true
 		end
-	
+
 		bash "update-#{w}-conf-alternatives" do
 			code %Q{
 				update-alternatives --install /etc/#{w}/conf #{w}-conf /etc/#{w}/conf.bcpc 50
@@ -25,13 +25,12 @@ when "debian"
 			}
 		end
 	end
-	
-end	
-when "rhel"
-  # do things on RHEL platforms (redhat, centos, scientific, etc)
+
+when "rhel" # do things on RHEL platforms (redhat, centos, scientific, etc)
+   "run away"
 end
 
-package "zookeeper" do 
+package "zookeeper" do
   action :upgrade
 end
 
@@ -48,10 +47,10 @@ end
    ssl-client.xml
    ssl-server.xml
    yarn-env.sh
-   yarn-site.xml}.each do |t| 
-  template "/etc/hadoop/conf/#{t}" do 
+   yarn-site.xml}.each do |t|
+  template "/etc/hadoop/conf/#{t}" do
     source "hdp_#{t}.erb"
-    variables {hh_hosts => get_hadoop_heads , journal_hosts => get_hadoop_journal_nodes, zk_servers => get_zk_ensemble}
+    variables (:hh_hosts => get_hadoop_heads, :journal_hosts => get_hadoop_journal_nodes, :zk_servers => get_zk_ensemble)
   end
 end
 

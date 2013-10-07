@@ -86,7 +86,7 @@
   
   <property>
     <name>dfs.namenode.shared.edits.dir</name>
-    <value>qjournal://<%= @journal_hosts.map{ |s| s.host + ":8485" }.join(";") } %>/bcpc</value>
+    <value>qjournal://<%= @journal_hosts.map{ |s| s.host + ":8485" }.join(";") %>/bcpc</value>
   </property>
 
 	<% if node[:bcpc][:hadoop][:journal][:paths] %>
