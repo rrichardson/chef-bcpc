@@ -21,3 +21,20 @@ service "hadoop-hdf-zkfs" do
   action :restart
 end
 
+(1..4).each do |i| 
+
+	directory "/disk#{i}/dfs/nn" do
+		owner "hdfs"
+		group "hdfs"
+    mode 0700
+		action :create
+	end
+	
+  directory "/disk#{i}/dfs/namedir" do
+		owner "hdfs"
+		group "hdfs"
+    mode 0700
+		action :create
+	end
+
+end

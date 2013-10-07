@@ -14,6 +14,7 @@ bash "format-zk-hfds-ha" do
 	user "hdfs"
 end
 
+
 service "hadoop-yarn-resourcemanager" do
 	action [:enable, :restart]
 end

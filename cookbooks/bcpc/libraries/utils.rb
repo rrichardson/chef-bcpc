@@ -84,6 +84,11 @@ def get_hadoop_journal_nodes
 	return results.sort_by{|x| x.hostname }.each_with_index.map{ |x, i| { :host => x, :num => i} }
 end
 
+def get_zk_ensemble
+	results = search(:node, "role:BCPC-Zookeeper-Server AND chef_environment:#{node.chef_environment}")
+	return results.sort_by{|x| x.hostname }.each_with_index.map{ |x, i| { :host => x, :num => i} }
+end
+
 def secure_password
 	pw = String.new
 	while pw.length < 20

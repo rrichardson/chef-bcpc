@@ -8,17 +8,26 @@ end
 
 (1..4).each do |i| 
 
-	directory "/data/#{i}/yarn/logs" do
+	directory "/disk#{i}/yarn/logs" do
 		owner "yarn"
 		group "yarn"
+    mode 0700
 		action :create
 	end
 	
-	directory "/data/#{i}/yarn/local" do
+	directory "/disk#{i}/yarn/local" do
 		owner "yarn"
 		group "yarn"
+    mode 0700
 		action :create
 	end
+
+  directory "/disk#{i}/dfs/dn" do 
+		owner "hdfs"
+		group "hdfs"
+    mode 0700
+		action :create
+  end
 end
 
 bash "create-hdfs-temp" do 

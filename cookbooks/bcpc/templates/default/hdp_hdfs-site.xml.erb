@@ -20,8 +20,13 @@
 <configuration>
   <property>
      <name>dfs.name.dir</name>
-     <value>/var/lib/hadoop-hdfs/cache/hdfs/dfs/name</value>
+     <value>/data/1/dfs/namedir,/data/2/dfs/namedir,/data/3/dfs/namedir,/data/3/dfs/namedir</value>
 	</property>
+  
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>/data/1/dfs/nn,/data/2/dfs/nn,/data/3/dfs/nn,/data/4/dfs/nn</value>
+  </property>
 
   <property>
      <name>dfs.nameservices</name>
@@ -32,11 +37,21 @@
     <name>dfs.ha.namenodes.bcpc</name>
 		<value>namenode1,namenode2</value>
   </property>
-	
+
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>/data/1/dfs/dn,/data/2/dfs/dn,/data/3/dfs/dn,/data/3/dfs/dn</value>
+  </property>
+
+  <property>
+    <name>dfs.datanode.failed.volumes.tolerated</name>
+    <value>3</value>
+  </property>
+
   <% @hh_hosts.each do |h| %>	
 	<property>
-		<name>dfs.namenode.http-address.bcpc.namenode<%=h.num %></name>
-		<value><%=h.host %>:50070</value>
+		<name>dfs.namenode.rpc-address.bcpc.namenode<%=h.num %></name>
+		<value><%=h.host %>:8020</value>
 	</property>
   <% end %>
 	
@@ -54,15 +69,8 @@
 	</property>
   <% end %>
 
-  <% @journal_hosts.each do |h| %>	
-  <property>
-    <name>dfs.namenode.shared.edits.dir</name>
-    <value>qjournal://node1.example.com:8485;node2.example.com:8485;node3.example.com:8485/mycluster</value>
-  </property>
-  <% end %>
-
 	<property>
-		<name>dfs.client.failover.proxy.provider.mycluster</name>
+		<name>dfs.client.failover.proxy.provider.bcpc</name>
 		<value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
 	</property>
 
@@ -75,11 +83,16 @@
     <name>ha.zookeeper.quorum</name>
 		<value><%= @zk_servers.map{ |s| s.host + ":2181" }.join(",") %></value> 
   </property>
+  
+  <property>
+    <name>dfs.namenode.shared.edits.dir</name>
+    <value>qjournal://<%= @journal_hosts.map{ |s| s.host + ":8485" }.join(";") } %>/bcpc</value>
+  </property>
 
-	<% if node[:bcpc][:hadoop][:journal][:path] %>
+	<% if node[:bcpc][:hadoop][:journal][:paths] %>
 	<property>
  		<name>dfs.journalnode.edits.dir</name>
- 		<value><%= node[:bcpc][:hadoop][:journal][:path]</value>
+    <value><%= node[:bcpc][:hadoop][:journal][:paths] %></value>
 	</property>
   <% end %>
 
