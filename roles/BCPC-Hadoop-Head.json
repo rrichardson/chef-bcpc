@@ -1,19 +1,18 @@
 {
-    "name": "BCPC-Hadoop-Head",
-    "default_attributes": {
-    },
-    "json_class": "Chef::Role",
-    "run_list": [
-      "role[Basic]",
-      "recipe[bcpc::default]",
-      "recipe[bcpc::networking]",
-			"recipe[bcpc::hdp_base]",
-			"recipe[bcpc::hdp_resource_manager]",
-			"recipe[bcpc::hdfs_namenode]",
-			"recipe[bcpc::hdfs_datanode]"
-    ],
-    "description": "A highly-available head node in a BCPC Hadoop cluster",
-    "chef_type": "role",
-    "override_attributes": {
-    }
+  "name": "BCPC-Hadoop-Head",
+  "default_attributes": {
+  },
+  "json_class": "Chef::Role",
+  "run_list": [
+    "role[Basic]",
+    "recipe[bcpc::default]",
+    "recipe[bcpc::networking]",
+    "recipe[bcpc::hdp_base]",
+      "recipe[bcpc::hdp_resource_manager]",
+      "recipe[bcpc::hdfs_namenode]"
+  ],
+  "description": "A highly-available head node in a BCPC Hadoop cluster",
+  "chef_type": "role",
+  "override_attributes": {
+  }
 }
