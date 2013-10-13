@@ -20,12 +20,12 @@
 <configuration>
   <property>
      <name>dfs.name.dir</name>
-     <value>/data/1/dfs/namedir,/data/2/dfs/namedir,/data/3/dfs/namedir,/data/3/dfs/namedir</value>
+     <value>/disk1/dfs/namedir,/disk2/dfs/namedir,/disk3/dfs/namedir,/disk4/dfs/namedir</value>
 	</property>
   
   <property>
     <name>dfs.namenode.name.dir</name>
-    <value>/data/1/dfs/nn,/data/2/dfs/nn,/data/3/dfs/nn,/data/4/dfs/nn</value>
+    <value>/disk1/dfs/nn,/disk2/dfs/nn,/disk3/dfs/nn,/disk4/dfs/nn</value>
   </property>
 
   <property>
@@ -40,7 +40,7 @@
 
   <property>
     <name>dfs.datanode.data.dir</name>
-    <value>/data/1/dfs/dn,/data/2/dfs/dn,/data/3/dfs/dn,/data/3/dfs/dn</value>
+    <value>/disk1/dfs/dn,/disk2/dfs/dn,/disk3/dfs/dn,/disk4/dfs/dn</value>
   </property>
 
   <property>
@@ -50,22 +50,22 @@
 
   <% @hh_hosts.each do |h| %>	
 	<property>
-		<name>dfs.namenode.rpc-address.bcpc.namenode<%=h.num %></name>
-		<value><%=h.host %>:8020</value>
+		<name>dfs.namenode.rpc-address.bcpc.namenode<%=h[:num] %></name>
+		<value><%=h[:host] %>:8020</value>
 	</property>
   <% end %>
 	
   <% @hh_hosts.each do |h| %>	
 	<property>
-		<name>dfs.namenode.http-address.bcpc.namenode<%=h.num %></name>
-		<value><%=h.host %>:50070</value>
+		<name>dfs.namenode.http-address.bcpc.namenode<%=h[:num] %></name>
+		<value><%=h[:host] %>:50070</value>
 	</property>
   <% end %>
 
   <% @hh_hosts.each do |h| %>	
 	<property>
-		<name>dfs.namenode.https-address.bcpc.namenode<%=h.num %></name>
-		<value><%=h.host %>:50080</value>
+		<name>dfs.namenode.https-address.bcpc.namenode<%=h[:num] %></name>
+		<value><%=h[:host] %>:50080</value>
 	</property>
   <% end %>
 
@@ -81,15 +81,17 @@
 
   <property>
     <name>ha.zookeeper.quorum</name>
-		<value><%= @zk_servers.map{ |s| s.host + ":2181" }.join(",") %></value> 
-  </property>
-  
-  <property>
-    <name>dfs.namenode.shared.edits.dir</name>
-    <value>qjournal://<%= @journal_hosts.map{ |s| s.host + ":8485" }.join(";") } %>/bcpc</value>
+		<value><%= @zk_servers.map{ |s| s[:host] + ":2181" }.join(",") %></value> 
   </property>
 
-	<% if node[:bcpc][:hadoop][:journal][:paths] %>
+  <% if false %>
+  <property>
+    <name>dfs.namenode.shared.edits.dir</name>
+    <value>qjournal://<%= @journal_hosts.map{ |s| s[:host] + ":8485" }.join(";") %>/bcpc</value>
+  </property>
+  <% end %>
+
+	<% if node[:bcpc][:hadoop][:journal] and node[:bcpc][:hadoop][:journal][:paths] %>
 	<property>
  		<name>dfs.journalnode.edits.dir</name>
     <value><%= node[:bcpc][:hadoop][:journal][:paths] %></value>

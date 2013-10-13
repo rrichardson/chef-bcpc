@@ -8,12 +8,18 @@
       "recipe[bcpc::default]",
       "recipe[bcpc::networking]",
 			"recipe[bcpc::hdp_base]",
-			"recipe[bcpc::hdp_resource_manager]",
+			"recipe[bcpc::hdfs_datanode]",
 			"recipe[bcpc::hdfs_namenode]",
-			"recipe[bcpc::hdfs_datanode]"
+			"recipe[bcpc::hdp_resource_manager]"
     ],
     "description": "A highly-available head node in a BCPC Hadoop cluster",
     "chef_type": "role",
     "override_attributes": {
+      "exhibitor" : {
+        "opts" : {
+          "port" : "10080",
+          "hostname" : "0.0.0.0" 
+        }
+      }
     }
 }

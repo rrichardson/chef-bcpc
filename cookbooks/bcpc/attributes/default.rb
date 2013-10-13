@@ -96,3 +96,11 @@ default['bcpc']['admin_email'] = "admin@localhost.com"
 default['bcpc']['zabbix']['user'] = "zabbix"
 default['bcpc']['zabbix']['group'] = "adm"
 
+#############################################
+#
+#  Hadoop specific configs
+#
+#############################################
+
+default[:bpcp][:hadoop] = {}
+default[:bcpc][:hadoop][:journal] = false

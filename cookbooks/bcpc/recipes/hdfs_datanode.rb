@@ -13,6 +13,7 @@ end
 		group "yarn"
     mode 0700
 		action :create
+    recursive true
 	end
 	
 	directory "/disk#{i}/yarn/local" do
@@ -20,6 +21,7 @@ end
 		group "yarn"
     mode 0700
 		action :create
+    recursive true
 	end
 
   directory "/disk#{i}/dfs/dn" do 
@@ -27,6 +29,7 @@ end
 		group "hdfs"
     mode 0700
 		action :create
+    recursive true
   end
 end
 

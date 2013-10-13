@@ -6,6 +6,7 @@ when "debian"
 			uri node['bcpc']['repos']['cloudera']
 			distribution node['lsb']['codename'] + '-cdh4'
 			components ["contrib"]
+      arch "amd64"
 			key "cloudera-archive.key"
 	end
 
@@ -26,14 +27,11 @@ when "debian"
 		end
 	end
 	
-end	
 when "rhel"
+  ""
   # do things on RHEL platforms (redhat, centos, scientific, etc)
 end
 
-package "zookeeper" do 
-  action :upgrade
-end
 
 %w{capacity-scheduler.xml
    container-executor.cfg
@@ -47,11 +45,22 @@ end
    slaves
    ssl-client.xml
    ssl-server.xml
-   yarn-env.sh
    yarn-site.xml}.each do |t| 
   template "/etc/hadoop/conf/#{t}" do 
     source "hdp_#{t}.erb"
-    variables {hh_hosts => get_hadoop_heads , journal_hosts => get_hadoop_journal_nodes, zk_servers => get_zk_ensemble}
+    mode 0644
+    variables(:hh_hosts => get_hadoop_heads , :journal_hosts => get_hadoop_journal_nodes, :zk_servers => get_zk_ensemble)
   end
 end
 
+%w{yarn-env.sh
+   hadoop-env.sh}.each do |t|
+  template "/etc/hadoop/conf/#{t}" do 
+    source "hdp_#{t}.erb"
+    mode 0755 
+    variables(:hh_hosts => get_hadoop_heads , :journal_hosts => get_hadoop_journal_nodes, :zk_servers => get_zk_ensemble)
+  end
+end
+
+
+include_recipe "zookeeper"

@@ -20,5 +20,6 @@ apt_repository "ceph" do
     uri node['bcpc']['repos']['ceph']
     distribution node['lsb']['codename']
     components ["main"]
+    arch "amd64"
     key "ceph-release.key"
 end
