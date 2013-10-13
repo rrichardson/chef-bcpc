@@ -10,7 +10,7 @@ when "debian"
 			key "cloudera-archive.key"
 	end
 
-	%w{hadoop hbase hive oozie pig}.each do |w| 
+	%w{hadoop hbase hive oozie pig}.each do |w|
 		directory "/etc/#{w}/conf.bcpc" do
 			owner "root"
 			group "root"
@@ -18,7 +18,7 @@ when "debian"
 			action :create
 			recursive true
 		end
-	
+
 		bash "update-#{w}-conf-alternatives" do
 			code %Q{
 				update-alternatives --install /etc/#{w}/conf #{w}-conf /etc/#{w}/conf.bcpc 50
@@ -32,6 +32,10 @@ when "rhel"
   # do things on RHEL platforms (redhat, centos, scientific, etc)
 end
 
+
+package "zookeeper" do
+  action :upgrade
+end
 
 %w{capacity-scheduler.xml
    container-executor.cfg

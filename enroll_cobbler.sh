@@ -20,10 +20,10 @@ if [ -z "$CURL" ]; then
 fi
 
 DIR=`dirname $0`/vbox
-
+CURDIR=`pwd`
 pushd $DIR
 
-KEYFILE=bootstrap_chef.id_rsa
+KEYFILE=$CURDIR/bootstrap_chef.id_rsa
 
 subnet=10.0.100
 node=11
